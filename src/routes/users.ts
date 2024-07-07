@@ -1,9 +1,8 @@
-import { Router } from 'express';
+import { Router } from "express";
 const router = Router();
 
-/* GET users listing. */
-router.get('/', function (req, res, next) {
-  res.send('respond with a resource');
-});
+import { register } from "../controllers/auth-controller.js";
+
+router.post("/register", register);
 
 export default router;
