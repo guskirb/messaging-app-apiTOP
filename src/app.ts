@@ -1,8 +1,14 @@
 import express, { json, urlencoded } from "express";
-import path, { join } from 'path';
-import { fileURLToPath } from 'url';
+import path, { join } from "path";
+import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import passport from "passport";
+import session from "express-session";
+import MongoStore from "connect-mongo";
+import "dotenv/config";
+import "./config/mongo-config.js";
+import "./config/passport.js";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
@@ -15,7 +21,18 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(join(__dirname, 'public')));
+app.use(express.static(join(__dirname, "public")));
+app.use(
+  session({
+    secret: "cats",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_STRING,
+    }),
+  })
+);
+app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
