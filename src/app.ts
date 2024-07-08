@@ -12,6 +12,7 @@ import "./config/passport.js";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
+import chatRoomRouter from "./routes/chatroom.js";
 
 const app = express();
 
@@ -36,5 +37,6 @@ app.use(passport.session());
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/chatrooms", chatRoomRouter);
 
 export default app;
