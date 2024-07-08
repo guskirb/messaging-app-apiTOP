@@ -1,5 +1,24 @@
 import asyncHandler from "express-async-handler";
+
 import ChatRoom from "../models/chatroom.js";
+
+export const get_chatrooms = asyncHandler(async (req, res) => {
+  try {
+    const chatRooms = await ChatRoom.find({ users: req.user._id });
+
+    res.status(200).json({
+      success: true,
+      chatrooms: chatRooms,
+    });
+    return;
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      errors: err,
+    });
+    return;
+  }
+});
 
 export const create_chatroom = asyncHandler(async (req, res) => {
   try {
