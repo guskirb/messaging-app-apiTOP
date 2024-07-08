@@ -3,7 +3,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcrypt";
 import User from "../models/user.js";
 
-const verify = async (username, password, done) => {
+const verify = async (username: any, password: any, done: any) => {
   try {
     const user = await User.findOne({
       $or: [{ email: username }, { username: username }],
@@ -22,11 +22,11 @@ const verify = async (username, password, done) => {
   }
 };
 
-const serialize = (user, done) => {
+const serialize = (user: any, done: any) => {
   done(null, user.id);
 };
 
-const deserialize = async (id, done) => {
+const deserialize = async (id: any, done: any) => {
   try {
     const user = await User.findById(id);
     done(null, user);

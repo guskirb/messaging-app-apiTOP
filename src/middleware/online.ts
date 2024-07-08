@@ -1,6 +1,11 @@
+import { Request, Response, NextFunction } from "express";
 import User from "../models/user.js";
 
-export const lastOnline = async (req, res, next) => {
+export const lastOnline = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   if (req.user) {
     try {
       await User.findByIdAndUpdate(req.user.id, {

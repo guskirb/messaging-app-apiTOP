@@ -1,10 +1,10 @@
-import { body, validationResult } from "express-validator";
+import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import { v2 as cloudinary } from "cloudinary";
 
 import User from "../models/user.js";
 
-export const get_users = asyncHandler(async (req, res) => {
+export const get_users = asyncHandler(async (req: Request, res: Response) => {
   try {
     const users = await User.find().select(
       "username join_date last_online image"
@@ -24,7 +24,7 @@ export const get_users = asyncHandler(async (req, res) => {
   }
 });
 
-export const get_user = asyncHandler(async (req, res) => {
+export const get_user = asyncHandler(async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id).select(
       "username join_date last_online image"
@@ -44,16 +44,16 @@ export const get_user = asyncHandler(async (req, res) => {
   }
 });
 
-export const get_friends = asyncHandler(async (req, res) => {
+export const get_friends = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(req.user.id).populate(
+    const user = await User.findById(req.user?.id).populate(
       "friends",
       "username join_date last_online image"
     );
 
     res.status(200).json({
       success: true,
-      friends: user.friends,
+      friends: user?.friends,
     });
     return;
   } catch (err) {
@@ -65,10 +65,10 @@ export const get_friends = asyncHandler(async (req, res) => {
   }
 });
 
-export const add_friend = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id);
+export const add_friend = asyncHandler(async (req: Request, res: Response) => {
+  const user = await User.findById(req.user?.id);
 
-  if (user?.friends.includes(req.params.id)) {
+  if (user?.friends.includes(req.params.id as any)) {
     res.status(400).json({
       success: false,
       error: "User already a friend",
@@ -78,7 +78,7 @@ export const add_friend = asyncHandler(async (req, res) => {
 
   try {
     const user = await User.updateOne(
-      { _id: req.user.id },
+      { _id: req.user?.id },
       { $push: { friends: req.params.id } }
     );
 
@@ -96,30 +96,32 @@ export const add_friend = asyncHandler(async (req, res) => {
   }
 });
 
-export const remove_friend = asyncHandler(async (req, res) => {
-  try {
-    const user = await User.updateOne(
-      { _id: req.user.id },
-      { $pull: { friends: req.params.id } }
-    );
+export const remove_friend = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const user = await User.updateOne(
+        { _id: req.user?.id },
+        { $pull: { friends: req.params.id } }
+      );
 
-    res.status(201).json({
-      success: true,
-      user: user,
-    });
-    return;
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      errors: err,
-    });
-    return;
+      res.status(201).json({
+        success: true,
+        user: user,
+      });
+      return;
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        errors: err,
+      });
+      return;
+    }
   }
-});
+);
 
-export const upload_img = asyncHandler(async (req, res) => {
+export const upload_img = asyncHandler(async (req: Request, res: Response) => {
   let response = await cloudinary.uploader.upload(
-    req.file.path,
+    req.file?.path!,
     function (err, result) {
       if (err) {
         console.log(err);

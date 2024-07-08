@@ -1,4 +1,6 @@
-export const isAuth = (req, res, next) => {
+import { Request, Response, NextFunction } from "express";
+
+export const isAuth = (req: Request, res: Response, next: NextFunction) => {
   if (req.isAuthenticated()) {
     next();
   } else {
@@ -9,8 +11,8 @@ export const isAuth = (req, res, next) => {
   }
 };
 
-export const isUser = (req, res, next) => {
-  if (req.user.id === req.params.id) {
+export const isUser = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user?.id === req.params.id) {
     next();
   } else {
     res.status(401).json({

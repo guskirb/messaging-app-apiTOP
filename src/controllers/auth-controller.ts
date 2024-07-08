@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
@@ -30,7 +31,7 @@ export const register = [
     .withMessage("Password must contain at least 5 characters")
     .escape(),
 
-  asyncHandler(async (req, res) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
