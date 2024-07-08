@@ -8,6 +8,10 @@ const UserSchema = new Schema({
   friends: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
   join_date: { type: Date, default: new Date() },
   last_online: { type: Date, default: new Date() },
+  image: {
+    type: String,
+    default: "https://static.scrum.org/web/images/profile-placeholder.png",
+  },
 });
 
 const UserModel = mongoose.model("User", UserSchema);

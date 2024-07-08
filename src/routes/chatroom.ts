@@ -20,6 +20,6 @@ router.post("/:id/add-user", isAuth, inChatRoom, add_to_chatroom);
 
 router.post("/:id/leave", isAuth, inChatRoom, leave_chatroom);
 
-router.use("/id/messages", messageRouter);
+router.use("/:id/messages", messageRouter);
 
 export default router;

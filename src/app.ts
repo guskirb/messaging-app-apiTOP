@@ -9,6 +9,7 @@ import MongoStore from "connect-mongo";
 import "dotenv/config";
 import "./config/mongo-config.js";
 import "./config/passport.js";
+import "./config/cloudinary.js"
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
@@ -25,7 +26,7 @@ const __dirname = path.dirname(__filename);
 app.use(express.static(join(__dirname, "public")));
 app.use(
   session({
-    secret: "cats",
+    secret: process.env.SESSION_SECRET!,
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
