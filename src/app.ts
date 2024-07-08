@@ -6,10 +6,11 @@ import logger from "morgan";
 import passport from "passport";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import { lastOnline } from "./middleware/online.js";
 import "dotenv/config";
 import "./config/mongo-config.js";
 import "./config/passport.js";
-import "./config/cloudinary.js"
+import "./config/cloudinary.js";
 
 import indexRouter from "./routes/index.js";
 import usersRouter from "./routes/users.js";
@@ -35,6 +36,7 @@ app.use(
   })
 );
 app.use(passport.session());
+app.use(lastOnline);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
