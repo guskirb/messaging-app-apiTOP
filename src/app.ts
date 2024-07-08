@@ -7,6 +7,8 @@ import passport from "passport";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
+import compression from "compression";
+import helmet from "helmet";
 import { lastOnline } from "./middleware/online.js";
 import "dotenv/config";
 import "./config/mongo-config.js";
@@ -19,8 +21,10 @@ import chatRoomRouter from "./routes/chatroom.js";
 
 const app = express();
 
-app.use(logger("dev"));
+app.use(compression());
+app.use(helmet());
 app.use(cors());
+app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
