@@ -7,6 +7,7 @@ import { upload } from "../config/multer.js";
 import {
   get_users,
   get_user,
+  get_me,
   get_friends,
   add_friend,
   remove_friend,
@@ -15,6 +16,8 @@ import {
 import { isAuth, isUser } from "../middleware/auth.js";
 
 router.get("/", get_users);
+
+router.get("/me", isAuth, get_me);
 
 router.get("/friends", isAuth, get_friends);
 

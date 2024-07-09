@@ -39,6 +39,9 @@ app.use(
     store: MongoStore.create({
       mongoUrl: process.env.MONGO_STRING,
     }),
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    },
   })
 );
 app.use(passport.session());

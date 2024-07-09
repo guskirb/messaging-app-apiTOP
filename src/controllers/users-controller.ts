@@ -44,6 +44,25 @@ export const get_user = asyncHandler(async (req: Request, res: Response) => {
   }
 });
 
+export const get_me = asyncHandler(async (req: Request, res: Response) => {
+  try {
+    const user = await User.findById(req.user?.id).select(
+      "username join_date last_online image"
+    );
+
+    res.status(200).json({
+      success: true,
+      user: user,
+    });
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      errors: err,
+    });
+    return;
+  }
+});
+
 export const get_friends = asyncHandler(async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.user?.id).populate(
