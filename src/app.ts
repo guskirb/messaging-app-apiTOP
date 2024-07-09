@@ -23,7 +23,7 @@ const app = express();
 
 app.use(compression());
 app.use(helmet());
-app.use(cors({ credentials: true, origin: "http://localhost:5173/" }));
+app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
