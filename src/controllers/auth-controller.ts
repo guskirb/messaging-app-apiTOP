@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
+import { issueJWT } from "../utils/issue-JWT.js";
 
 import User from "../models/user.js";
 
@@ -64,6 +65,70 @@ export const register = [
         errors: err,
       });
       return;
+    }
+  }),
+];
+
+export const log_in = [
+  body("username")
+    .trim()
+    .custom(async (value) => {
+      const user = await User.findOne({
+        $or: [{ email: value }, { username: value }],
+      }).exec();
+      if (!user) {
+        return new Error("User not found");
+      }
+    })
+    .escape(),
+  body("password", "Password incorrect")
+    .isLength({ min: 5 })
+    .withMessage("Password must contain at least 5 characters")
+    .custom(async (value, { req }) => {
+      const user = await User.findOne({
+        $or: [{ email: req.body.username }, { username: req.body.username }],
+      }).exec();
+      if (!user) {
+        throw new Error();
+      } else {
+        const match = await bcrypt.compare(value, user.password);
+        if (!match) {
+          throw new Error("Password incorrect");
+        }
+      }
+    })
+    .escape(),
+
+  asyncHandler(async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      try {
+        const user = await User.findOne({
+          $or: [{ email: req.body.username }, { username: req.body.username }],
+        }).exec();
+        const jwt = issueJWT(user);
+
+        res.status(200).json({
+          success: true,
+          user: user,
+          token: jwt.token,
+          expires: jwt.expires,
+        });
+        return;
+      } catch (err) {
+        res.status(400).json({
+          success: false,
+          errors: err,
+        });
+        return;
+      }
     }
   }),
 ];

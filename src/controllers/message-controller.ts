@@ -30,7 +30,7 @@ export const post_message = [
   asyncHandler(async (req: Request, res: Response) => {
     const errors = validationResult(req);
 
-    if (errors.isEmpty()) {
+    if (!errors.isEmpty()) {
       res.status(400).json({
         success: false,
         errors: errors.array(),

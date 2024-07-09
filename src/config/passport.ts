@@ -1,42 +1,24 @@
+import "dotenv/config";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
-import bcrypt from "bcrypt";
 import User from "../models/user.js";
 
-const verify = async (username: any, password: any, done: any) => {
+const options = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.ACCESS_TOKEN,
+};
+
+const strategy = new JwtStrategy(options as any, async (payload, done) => {
   try {
-    const user = await User.findOne({
-      $or: [{ email: username }, { username: username }],
-    });
-    if (!user) {
-      return done(null, false, {});
+    const user = await User.findOne({ _id: payload.sub });
+    if (user) {
+      done(null, user);
+    } else {
+      done(null, false);
     }
-
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return done(null, false, {});
-    }
-    return done(null, user);
   } catch (err) {
-    return done(err);
+    done(err, null);
   }
-};
-
-const serialize = (user: any, done: any) => {
-  done(null, user.id);
-};
-
-const deserialize = async (id: any, done: any) => {
-  try {
-    const user = await User.findById(id);
-    done(null, user);
-  } catch (err) {
-    done(err);
-  }
-};
-
-const strategy = new LocalStrategy(verify);
+});
 
 passport.use(strategy);
-passport.serializeUser(serialize);
-passport.deserializeUser(deserialize);

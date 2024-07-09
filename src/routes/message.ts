@@ -1,15 +1,15 @@
 import { Router } from "express";
 const router = Router({ mergeParams: true });
+import passport from "passport";
 
-import { isAuth } from "../middleware/auth.js";
 import { inChatRoom } from "../middleware/chatroom.js";
 import {
   get_messages,
   post_message,
 } from "../controllers/message-controller.js";
 
-router.get("/", isAuth, inChatRoom, get_messages);
+router.get("/", passport.authenticate("jwt", { session: false }), inChatRoom, get_messages);
 
-router.post("/", isAuth, inChatRoom, post_message);
+router.post("/", passport.authenticate("jwt", { session: false }), inChatRoom, post_message);
 
 export default router;
