@@ -6,9 +6,9 @@ import User from "../models/user.js";
 
 export const get_users = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const users = await User.find().select(
-      "username join_date last_online image"
-    );
+    const users = await User.find()
+      .sort({ last_online: -1 })
+      .select("username join_date last_online image last_online_formatted");
 
     res.status(200).json({
       success: true,
