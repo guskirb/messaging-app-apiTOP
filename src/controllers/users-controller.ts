@@ -65,7 +65,7 @@ export const get_friends = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      friends: user?.friends,
+      users: user?.friends,
     });
     return;
   } catch (err) {
