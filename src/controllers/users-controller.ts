@@ -8,7 +8,7 @@ export const get_users = asyncHandler(async (req: Request, res: Response) => {
   try {
     const users = await User.find()
       .sort({ last_online: -1 })
-      .select("username join_date last_online image last_online_formatted");
+      .select("-password -email");
 
     res.status(200).json({
       success: true,
@@ -26,9 +26,7 @@ export const get_users = asyncHandler(async (req: Request, res: Response) => {
 
 export const get_user = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(req.params.id).select(
-      "username join_date last_online image"
-    );
+    const user = await User.findById(req.params.id).select("-password -email");
 
     res.status(200).json({
       success: true,
@@ -46,9 +44,7 @@ export const get_user = asyncHandler(async (req: Request, res: Response) => {
 
 export const get_me = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(req.user?.id).select(
-      "username join_date last_online image"
-    );
+    const user = await User.findById(req.user?.id).select("-password");
 
     res.status(200).json({
       success: true,
@@ -65,10 +61,7 @@ export const get_me = asyncHandler(async (req: Request, res: Response) => {
 
 export const get_friends = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(req.user?.id).populate(
-      "friends",
-      "username join_date last_online image"
-    );
+    const user = await User.findById(req.user?.id).populate("-password -email");
 
     res.status(200).json({
       success: true,

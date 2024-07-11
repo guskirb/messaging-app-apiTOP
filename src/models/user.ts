@@ -30,5 +30,9 @@ UserSchema.virtual("last_online_formatted").get(function () {
   }
 });
 
+UserSchema.virtual("friend_count").get(function () {
+  return this.friends.length;
+});
+
 const UserModel = mongoose.model("User", UserSchema);
 export default UserModel;
