@@ -61,7 +61,7 @@ export const get_me = asyncHandler(async (req: Request, res: Response) => {
 
 export const get_friends = asyncHandler(async (req: Request, res: Response) => {
   try {
-    const user = await User.findById(req.user?.id).populate("-password -email");
+    const user = await User.findById(req.user?.id).populate("friends");
 
     res.status(200).json({
       success: true,
