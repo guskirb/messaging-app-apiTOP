@@ -106,3 +106,27 @@ export const leave_chatroom = asyncHandler(
     }
   }
 );
+
+export const pin_unpin_chatroom = asyncHandler(
+  async (req: Request, res: Response) => {
+    try {
+      const chatRoom = await ChatRoom.findById(req.params.id);
+
+      chatRoom!.pinned = !chatRoom?.pinned;
+
+      const newChatRoom = await chatRoom?.save();
+
+      res.status(200).json({
+        success: true,
+        chatroom: newChatRoom,
+      });
+      return;
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        errors: err,
+      });
+      return;
+    }
+  }
+);

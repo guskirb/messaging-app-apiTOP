@@ -9,6 +9,7 @@ import {
   create_chatroom,
   add_to_chatroom,
   leave_chatroom,
+  pin_unpin_chatroom,
 } from "../controllers/chatroom-controller.js";
 
 router.get(
@@ -35,6 +36,13 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   inChatRoom,
   leave_chatroom
+);
+
+router.post(
+  "/:id/pin",
+  passport.authenticate("jwt", { session: false }),
+  inChatRoom,
+  pin_unpin_chatroom
 );
 
 router.use("/:id/messages", messageRouter);
