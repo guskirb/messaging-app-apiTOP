@@ -6,7 +6,9 @@ import ChatRoom from "../models/chatroom.js";
 export const get_chatrooms = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const chatRooms = await ChatRoom.find({ users: req.user?._id });
+      const chatRooms = await ChatRoom.find({ users: req.user?._id }).populate(
+        "users"
+      );
 
       res.status(200).json({
         success: true,
@@ -26,7 +28,10 @@ export const get_chatrooms = asyncHandler(
 export const create_chatroom = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const newChatRoom = new ChatRoom({ users: [req.user?._id] });
+      const newChatRoom = new ChatRoom({
+        name: req.body.name,
+        users: [req.user?._id],
+      });
       const chatRoom = await newChatRoom.save();
 
       res.status(201).json({
