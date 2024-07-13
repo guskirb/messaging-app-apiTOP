@@ -7,7 +7,8 @@ export const get_chatrooms = asyncHandler(
   async (req: Request, res: Response) => {
     try {
       const chatRooms = await ChatRoom.find({ users: req.user?._id }).populate(
-        "users"
+        "users",
+        "-password -email"
       );
 
       res.status(200).json({
