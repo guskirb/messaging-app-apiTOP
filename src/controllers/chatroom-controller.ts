@@ -6,10 +6,9 @@ import ChatRoom from "../models/chatroom.js";
 export const get_chatrooms = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const chatRooms = await ChatRoom.find({ users: req.user?._id }).populate(
-        "users",
-        "-password -email"
-      );
+      const chatRooms = await ChatRoom.find({ users: req.user?._id })
+        .populate("users", "-password -email")
+        .sort({ last_active: -1 });
 
       res.status(200).json({
         success: true,
