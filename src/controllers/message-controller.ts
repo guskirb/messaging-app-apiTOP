@@ -3,6 +3,7 @@ import { body, validationResult } from "express-validator";
 import asyncHandler from "express-async-handler";
 
 import Message from "../models/message.js";
+import ChatRoom from "../models/chatroom.js";
 
 export const get_messages = asyncHandler(
   async (req: Request, res: Response) => {
@@ -39,6 +40,8 @@ export const post_message = [
     }
 
     try {
+      const chatroom = await ChatRoom.findById(req.params.id);
+
       const newMessage = new Message({
         message: req.body.message,
         user: req.user?._id,
@@ -47,6 +50,9 @@ export const post_message = [
       });
 
       const message = await newMessage.save();
+      chatroom!.last_message = newMessage.message;
+      chatroom!.last_active = newMessage.date;
+      await chatroom?.save();
       res.status(201).json({
         success: true,
         message: message,
