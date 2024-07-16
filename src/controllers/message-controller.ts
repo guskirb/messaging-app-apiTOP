@@ -8,7 +8,9 @@ import ChatRoom from "../models/chatroom.js";
 export const get_messages = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const messages = await Message.find({ chatroom: req.params.id });
+      const messages = await Message.find({ chatroom: req.params.id }).populate(
+        "user"
+      );
 
       res.status(200).json({
         success: true,
