@@ -54,6 +54,7 @@ export const post_message = [
 
       const message = await newMessage.save();
       chatroom!.last_message = newMessage.message;
+      chatroom!.message_type = "txt";
       chatroom!.last_active = newMessage.date;
       await chatroom?.save();
       res.status(201).json({
@@ -98,7 +99,8 @@ export const upload_img = asyncHandler(async (req: Request, res: Response) => {
     });
 
     const message = await newMessage.save();
-    chatroom!.last_message = newMessage.message;
+    chatroom!.last_message = "Image";
+    chatroom!.message_type = "img";
     chatroom!.last_active = newMessage.date;
     await chatroom?.save();
     res.status(201).json({
