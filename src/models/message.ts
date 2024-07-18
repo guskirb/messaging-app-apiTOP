@@ -4,7 +4,8 @@ import { DateTime } from "luxon";
 
 const MessageSchema = new Schema(
   {
-    message: { type: String, required: true },
+    message: { type: String },
+    image: { type: String },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     chatroom: { type: Schema.Types.ObjectId, ref: "ChatRoom", required: true },
     date: { type: Date, default: Date.now() },
