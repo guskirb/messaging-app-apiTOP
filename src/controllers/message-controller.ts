@@ -48,7 +48,7 @@ export const post_message = [
         message: req.body.message,
         user: req.user?._id,
         chatroom: req.params.id,
-        date: new Date(),
+        date: Date.now(),
       });
 
       const message = await newMessage.save();

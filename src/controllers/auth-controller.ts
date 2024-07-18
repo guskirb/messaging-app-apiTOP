@@ -49,8 +49,8 @@ export const register = [
         username: req.body.username,
         email: req.body.email,
         password: hashedPassword,
-        join_date: new Date(),
-        last_online: new Date(),
+        join_date: Date.now(),
+        last_online: Date.now(),
       });
 
       const user = await newUser.save();

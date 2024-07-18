@@ -8,7 +8,7 @@ const ChatRoomSchema = new Schema(
     users: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
     pinned: { type: Boolean, default: false },
     last_message: { type: String },
-    last_active: { type: Date, default: new Date() },
+    last_active: { type: Date, default: Date.now() },
   },
   {
     toObject: { virtuals: true },

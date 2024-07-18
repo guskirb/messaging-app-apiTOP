@@ -7,7 +7,7 @@ const MessageSchema = new Schema(
     message: { type: String, required: true },
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     chatroom: { type: Schema.Types.ObjectId, ref: "ChatRoom", required: true },
-    date: { type: Date, default: new Date() },
+    date: { type: Date, default: Date.now() },
   },
   {
     toObject: { virtuals: true },

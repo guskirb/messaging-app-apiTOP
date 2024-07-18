@@ -9,7 +9,7 @@ export const lastOnline = async (
   if (req.user) {
     try {
       await User.findByIdAndUpdate(req.user.id, {
-        last_online: new Date(),
+        last_online: Date.now(),
       });
       next();
     } catch (err) {

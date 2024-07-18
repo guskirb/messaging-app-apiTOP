@@ -8,8 +8,8 @@ const UserSchema = new Schema(
     email: { type: String, required: true },
     password: { type: String, required: true },
     friends: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
-    join_date: { type: Date, default: new Date() },
-    last_online: { type: Date, default: new Date() },
+    join_date: { type: Date, default: Date.now() },
+    last_online: { type: Date, default: Date.now() },
     image: {
       type: String,
       default:
