@@ -30,7 +30,7 @@ export const create_chatroom = asyncHandler(
     try {
       const newChatRoom = new ChatRoom({
         name: req.body.name,
-        users: [req.user?._id],
+        users: [req.user?._id, req.body.user],
         last_active: Date.now(),
       });
       const chatRoom = await newChatRoom.save();
