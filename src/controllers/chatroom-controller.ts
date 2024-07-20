@@ -34,11 +34,14 @@ export const create_chatroom = asyncHandler(
         last_active: Date.now(),
       });
       const chatRoom = await newChatRoom.save();
-      chatRoom.populate("users", "-password -email");
+      const returnedChatroom = await ChatRoom.findById(chatRoom._id).populate(
+        "users",
+        "-password -email"
+      );
 
       res.status(201).json({
         success: true,
-        chatroom: chatRoom,
+        chatroom: returnedChatroom,
       });
       return;
     } catch (err) {
