@@ -31,6 +31,10 @@ UserSchema.virtual("last_online_formatted").get(function () {
   }
 });
 
+UserSchema.virtual("join_date_formatted").get(function () {
+  return DateTime.fromJSDate(this.join_date).toLocaleString(DateTime.DATE_MED);
+});
+
 UserSchema.virtual("friend_count").get(function () {
   return this.friends.length;
 });
