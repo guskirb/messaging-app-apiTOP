@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 
 import ChatRoom from "../models/chatroom.js";
+import Message from "../models/message.js";
 
 export const get_chatrooms = asyncHandler(
   async (req: Request, res: Response) => {
@@ -91,15 +92,29 @@ export const add_to_chatroom = asyncHandler(
 export const leave_chatroom = asyncHandler(
   async (req: Request, res: Response) => {
     try {
-      const chatRoom = await ChatRoom.updateOne(
-        { _id: req.params.id },
-        { $pull: { users: req.user?._id } }
-      );
+      const chat = await ChatRoom.findById(req.params.id);
+      // If chatroom is empty then delete chatroom & messages
+      if (chat?.users.length === 1) {
+        await Promise.all([
+          ChatRoom.findByIdAndDelete(req.params.id),
+          Message.deleteMany({ chatroom: req.params.id }),
+        ]);
 
-      res.status(201).json({
-        success: true,
-        chatroom: chatRoom,
-      });
+        res.status(200).json({
+          success: true,
+          msg: "Chatroom deleted",
+        });
+      } else {
+        const chatRoom = await ChatRoom.updateOne(
+          { _id: req.params.id },
+          { $pull: { users: req.user?._id } }
+        );
+
+        res.status(200).json({
+          success: true,
+          chatroom: chatRoom,
+        });
+      }
       return;
     } catch (err) {
       res.status(400).json({
