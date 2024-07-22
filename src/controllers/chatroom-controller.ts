@@ -67,7 +67,7 @@ export const create_chatroom = asyncHandler(
     } else {
       res.status(201).json({
         success: true,
-        chatroom: currChatroom,
+        chatroom: currChatroom[0],
       });
       return;
     }
