@@ -28,27 +28,46 @@ export const get_chatrooms = asyncHandler(
 
 export const create_chatroom = asyncHandler(
   async (req: Request, res: Response) => {
-    try {
-      const newChatRoom = new ChatRoom({
-        name: req.body.name,
-        users: [req.user?._id, req.body.user],
-        last_active: Date.now(),
-      });
-      const chatRoom = await newChatRoom.save();
-      const returnedChatroom = await ChatRoom.findById(chatRoom._id).populate(
-        "users",
-        "-password -email"
-      );
+    const currChatroom = await ChatRoom.find({
+      $and: [
+        {
+          users: [req.user?._id, req.body.user],
+        },
+        {
+          users: { $size: 2 },
+        },
+      ],
+    }).populate("users", "-password -email");
 
+    if (currChatroom.length === 0) {
+      try {
+        const newChatRoom = new ChatRoom({
+          name: req.body.name,
+          users: [req.user?._id, req.body.user],
+          last_active: Date.now(),
+        });
+        const chatRoom = await newChatRoom.save();
+        const returnedChatroom = await ChatRoom.findById(chatRoom._id).populate(
+          "users",
+          "-password -email"
+        );
+
+        res.status(201).json({
+          success: true,
+          chatroom: returnedChatroom,
+        });
+        return;
+      } catch (err) {
+        res.status(400).json({
+          success: false,
+          errors: err,
+        });
+        return;
+      }
+    } else {
       res.status(201).json({
         success: true,
-        chatroom: returnedChatroom,
-      });
-      return;
-    } catch (err) {
-      res.status(400).json({
-        success: false,
-        errors: err,
+        chatroom: currChatroom,
       });
       return;
     }
