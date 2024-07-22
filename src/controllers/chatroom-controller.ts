@@ -88,7 +88,7 @@ export const add_to_chatroom = asyncHandler(
     }
 
     try {
-      const chatRoom = await ChatRoom.updateOne(
+      const chatRoom = await ChatRoom.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { users: req.body.user } }
       );
