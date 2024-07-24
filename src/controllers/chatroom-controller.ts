@@ -183,7 +183,7 @@ export const edit_chatroom_name = [
       return;
     }
     try {
-      const updatedChatroom = await ChatRoom.updateOne(
+      const updatedChatroom = await ChatRoom.findOneAndUpdate(
         { _id: req.params.id },
         { name: req.body.name }
       );
