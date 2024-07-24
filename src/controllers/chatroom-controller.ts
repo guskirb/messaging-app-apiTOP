@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
+import { body, validationResult } from "express-validator";
 
 import ChatRoom from "../models/chatroom.js";
 import Message from "../models/message.js";
@@ -168,3 +169,36 @@ export const pin_unpin_chatroom = asyncHandler(
     }
   }
 );
+
+export const edit_chatroom_name = [
+  body("name").isLength({ min: 1 }).withMessage("Enter a name").escape(),
+  asyncHandler(async (req: Request, res: Response) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      res.status(400).json({
+        success: false,
+        errors: errors.array(),
+      });
+      return;
+    }
+    try {
+      const updatedChatroom = await ChatRoom.updateOne(
+        { _id: req.params.id },
+        { name: req.body.name }
+      );
+
+      res.status(200).json({
+        success: true,
+        chatroom: updatedChatroom,
+      });
+      return;
+    } catch (err) {
+      res.status(400).json({
+        success: false,
+        errors: err,
+      });
+      return;
+    }
+  }),
+];

@@ -94,7 +94,7 @@ export const add_friend = asyncHandler(async (req: Request, res: Response) => {
       { $push: { friends: req.params.id } }
     );
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       user: user,
     });
@@ -116,7 +116,7 @@ export const remove_friend = asyncHandler(
         { $pull: { friends: req.params.id } }
       );
 
-      res.status(201).json({
+      res.status(200).json({
         success: true,
         user: user,
       });
