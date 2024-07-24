@@ -92,7 +92,7 @@ export const add_to_chatroom = asyncHandler(
       const chatRoom = await ChatRoom.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { users: req.body.user } }
-      );
+      ).populate("users", "-password -email");
 
       res.status(201).json({
         success: true,
@@ -186,7 +186,7 @@ export const edit_chatroom_name = [
       const updatedChatroom = await ChatRoom.findOneAndUpdate(
         { _id: req.params.id },
         { name: req.body.name }
-      );
+      ).populate("users", "-password -email");
 
       res.status(200).json({
         success: true,
