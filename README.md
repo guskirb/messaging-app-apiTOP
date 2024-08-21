@@ -1,5 +1,5 @@
 # Messaging Application Client
-This is the backend of the messaging application.
+This is the backend of the messaging application. A stateless RESTful API that performs CRUD operations on a mongoDB database.
 ## Links
 * [Live Demo](https://chat-app-guskirb.netlify.app/) (It may take a moment to load due to the API host wake up time.)
 * [Frontend Repository](https://github.com/guskirb/messaging-app-clientTOP)
