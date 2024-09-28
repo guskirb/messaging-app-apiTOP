@@ -7,6 +7,7 @@ This is the backend of the messaging application. A stateless RESTful API that p
 * RESTful API with stateless JWT authorization and authentication.
 * Ability to perform CRUD operations on persistant storage.
 * Middleware to set online status & authorize user based on request headers.
+* Uses Express async handler middleware to catch errors.
 ## Project Stack
 Frontend: <br>
 [![My Skills](https://skillicons.dev/icons?i=ts,css,react,vite)](https://skillicons.dev)<br>
